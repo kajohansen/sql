@@ -1,0 +1,231 @@
+# Sequel Pro dump
+# Version 2492
+# http://code.google.com/p/sequel-pro
+#
+# Host: 127.0.0.1 (MySQL 5.1.44)
+# Database: WODiscussionBoards
+# Generation Time: 2011-06-14 15:48:15 +0200
+# ************************************************************
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+# Dump of table ATTACHMENT
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `ATTACHMENT`;
+
+CREATE TABLE `ATTACHMENT` (
+  `ATTACHMENT_ID` int(11) NOT NULL,
+  `CONTENT` text,
+  `FILENAME` char(255) DEFAULT NULL,
+  `MESSAGE_ID` int(11) NOT NULL,
+  PRIMARY KEY (`ATTACHMENT_ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+
+
+# Dump of table BOARD
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `BOARD`;
+
+CREATE TABLE `BOARD` (
+  `ALLOWS_POSTING` int(11) DEFAULT NULL,
+  `BOARD_ID` int(11) NOT NULL,
+  `BOARD_NAME` char(255) DEFAULT NULL,
+  `DEFAULT_ACCESS_LEVEL` int(11) DEFAULT NULL,
+  `LAST_POSTING_NUMBER` int(11) DEFAULT NULL,
+  `PARENT_BOARD_ID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`BOARD_ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+LOCK TABLES `BOARD` WRITE;
+/*!40000 ALTER TABLE `BOARD` DISABLE KEYS */;
+INSERT INTO `BOARD` (`ALLOWS_POSTING`,`BOARD_ID`,`BOARD_NAME`,`DEFAULT_ACCESS_LEVEL`,`LAST_POSTING_NUMBER`,`PARENT_BOARD_ID`)
+VALUES
+	(NULL,1,'Apple Technologies',1,NULL,NULL),
+	(1,2,'WebObjects',2,NULL,1),
+	(1,3,'Mac OS X',2,NULL,1);
+
+/*!40000 ALTER TABLE `BOARD` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table EO_PK_TABLE
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `EO_PK_TABLE`;
+
+CREATE TABLE `EO_PK_TABLE` (
+  `NAME` char(40) NOT NULL,
+  `PK` int(11) DEFAULT NULL,
+  PRIMARY KEY (`NAME`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+
+
+# Dump of table MESSAGE
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `MESSAGE`;
+
+CREATE TABLE `MESSAGE` (
+  `CONTENT` text,
+  `DATE_POSTED` datetime DEFAULT NULL,
+  `MESSAGE_ID` int(11) NOT NULL,
+  `PARENT_MESSAGE_ID` int(11) DEFAULT NULL,
+  `PERSON_ID` int(11) NOT NULL,
+  `SUBJECT` char(255) DEFAULT NULL,
+  PRIMARY KEY (`MESSAGE_ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+LOCK TABLES `MESSAGE` WRITE;
+/*!40000 ALTER TABLE `MESSAGE` DISABLE KEYS */;
+INSERT INTO `MESSAGE` (`CONTENT`,`DATE_POSTED`,`MESSAGE_ID`,`PARENT_MESSAGE_ID`,`PERSON_ID`,`SUBJECT`)
+VALUES
+	('This is an administrator posting to all default discussion boards.\n\nWe hope you enjoy using this application.','2001-10-24 02:56:22',1,NULL,1,'Welcome To DiscussionBoard'),
+	('Yeah, it\'s fun discussing Mac OS X.','2001-10-24 02:58:40',2,1,2,'Welcome To DiscussionBoard'),
+	('woadmin','2001-10-24 02:59:09',3,1,2,'Welcome To DiscussionBoard');
+
+/*!40000 ALTER TABLE `MESSAGE` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table PERSON
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `PERSON`;
+
+CREATE TABLE `PERSON` (
+  `CN` char(255) NOT NULL,
+  `DESCRIPTION` char(255) DEFAULT NULL,
+  `PERSON_ID` int(11) NOT NULL,
+  `SEE_ALSO` char(255) DEFAULT NULL,
+  `SN` char(255) NOT NULL,
+  `TELEPHONE_NUMBER` char(255) DEFAULT NULL,
+  `USER_PASSWORD` char(255) DEFAULT NULL,
+  PRIMARY KEY (`PERSON_ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+LOCK TABLES `PERSON` WRITE;
+/*!40000 ALTER TABLE `PERSON` DISABLE KEYS */;
+INSERT INTO `PERSON` (`CN`,`DESCRIPTION`,`PERSON_ID`,`SEE_ALSO`,`SN`,`TELEPHONE_NUMBER`,`USER_PASSWORD`)
+VALUES
+	('woadmin','Default WebObjects Administrator',1,NULL,'woadmin',NULL,'woadmin'),
+	('wouser','Default WebObjects User',2,NULL,'wouser',NULL,'wouser');
+
+/*!40000 ALTER TABLE `PERSON` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table POSTING
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `POSTING`;
+
+CREATE TABLE `POSTING` (
+  `BOARD_ID` int(11) NOT NULL,
+  `MESSAGE_ID` int(11) NOT NULL,
+  `POSTING_NUMBER` int(11) DEFAULT NULL,
+  `POSTING_PRIORITY` int(11) DEFAULT NULL,
+  PRIMARY KEY (`MESSAGE_ID`,`BOARD_ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+LOCK TABLES `POSTING` WRITE;
+/*!40000 ALTER TABLE `POSTING` DISABLE KEYS */;
+INSERT INTO `POSTING` (`BOARD_ID`,`MESSAGE_ID`,`POSTING_NUMBER`,`POSTING_PRIORITY`)
+VALUES
+	(3,1,NULL,NULL),
+	(2,1,NULL,NULL),
+	(3,2,NULL,NULL),
+	(2,3,NULL,NULL);
+
+/*!40000 ALTER TABLE `POSTING` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table PROFILE
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `PROFILE`;
+
+CREATE TABLE `PROFILE` (
+  `ALIAS` char(255) DEFAULT NULL,
+  `IS_ADMINSTRATOR` int(11) DEFAULT NULL,
+  `PERSON_ID` int(11) NOT NULL,
+  `PROFILE_ID` int(11) NOT NULL,
+  `REFRESH_PING_RATE` int(11) DEFAULT NULL,
+  `USER_DEFAULTS` char(255) DEFAULT NULL,
+  PRIMARY KEY (`PROFILE_ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+LOCK TABLES `PROFILE` WRITE;
+/*!40000 ALTER TABLE `PROFILE` DISABLE KEYS */;
+INSERT INTO `PROFILE` (`ALIAS`,`IS_ADMINSTRATOR`,`PERSON_ID`,`PROFILE_ID`,`REFRESH_PING_RATE`,`USER_DEFAULTS`)
+VALUES
+	('WebObjects Administrator',1,1,1,30,'{\n\"question = window, task = queryWindow._EOWindowWidth\" = \"436\";\n\"question = window, task = queryWindow._EOWindowHeight\" = \"378\";\n\"question = modalDialog, task = select, entity = Board._EOWindowWidth\" = \"387\";\n\"question = window, task = form, entity = Pe'),
+	('WebObjects User',0,2,2,30,'{\n\"question = window, task = preferences._EOWindowWidth\" = \"362\";\n\"question = window, task = subscriptions._EOWindowWidth\" = \"200\";\n\"question = window, task = preferences._EOWindowY\" = \"0\";\n\"question = window, task = preferences._EOWindowX\" = \"389\";\n\"ques');
+
+/*!40000 ALTER TABLE `PROFILE` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table STATUS_RANGE
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `STATUS_RANGE`;
+
+CREATE TABLE `STATUS_RANGE` (
+  `END_POSTING_NUMBER` int(11) DEFAULT NULL,
+  `START_POSTING_NUMBER` int(11) DEFAULT NULL,
+  `STATUS_ID` int(11) NOT NULL,
+  `SUBSCRIPTION_ID` int(11) NOT NULL,
+  PRIMARY KEY (`STATUS_ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+
+
+# Dump of table SUBSCRIPTION
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `SUBSCRIPTION`;
+
+CREATE TABLE `SUBSCRIPTION` (
+  `ACCESS_LEVEL` int(11) DEFAULT NULL,
+  `BOARD_ID` int(11) NOT NULL,
+  `IS_FAVORITE` int(11) DEFAULT NULL,
+  `PERSON_ID` int(11) NOT NULL,
+  `SHOULD_SEND_DIGEST` int(11) DEFAULT NULL,
+  `SUBSCRIPTION_ID` int(11) NOT NULL,
+  PRIMARY KEY (`SUBSCRIPTION_ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+LOCK TABLES `SUBSCRIPTION` WRITE;
+/*!40000 ALTER TABLE `SUBSCRIPTION` DISABLE KEYS */;
+INSERT INTO `SUBSCRIPTION` (`ACCESS_LEVEL`,`BOARD_ID`,`IS_FAVORITE`,`PERSON_ID`,`SHOULD_SEND_DIGEST`,`SUBSCRIPTION_ID`)
+VALUES
+	(NULL,3,NULL,2,NULL,2),
+	(NULL,2,NULL,2,NULL,1);
+
+/*!40000 ALTER TABLE `SUBSCRIPTION` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+
+
+
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
